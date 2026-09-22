@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>动手学深度学习 | Thomas Bob's Blog</title><meta name="author" content="Thomas Bob"><meta name="copyright" content="Thomas Bob"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="原则：记录深度学习的规律，例如模型构建、训练等方面的技巧；阐释我自己对于深度学习各知识点的理解，探究本质。 前置 深度学习一般用32位浮点数即可 反向累积过程中只需要按照确定的分支计算即可（类似反推法），其他分支的数值可以不用计算和存储 深度学习中一般是对标量求导  线性神经网络线性回归 小批量随机梯度下降  由于在整个训练集上计算梯度太贵，故取小批量样本来近似计算损失，从而求取近似梯度。 更新公">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>动手学深度学习 | Thomas Bob's Blog</title><meta name="author" content="Thomas Bob"><meta name="copyright" content="Thomas Bob"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="原则：记录深度学习的规律，例如模型构建、训练等方面的技巧；阐释我自己对于深度学习各知识点的理解，探究本质。 前置 深度学习一般用32位浮点数即可 反向累积过程中只需要按照确定的分支计算即可（类似反推法），其他分支的数值可以不用计算和存储 深度学习中一般是对标量求导  线性神经网络线性回归 小批量随机梯度下降 由于在整个训练集上计算梯度太贵，故取小批量样本来近似计算损失，从而求取近似梯度。 更新公式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动手学深度学习">
 <meta property="og:url" content="https://jrxiang.github.io/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Thomas Bob&#39;s Blog">
-<meta property="og:description" content="原则：记录深度学习的规律，例如模型构建、训练等方面的技巧；阐释我自己对于深度学习各知识点的理解，探究本质。 前置 深度学习一般用32位浮点数即可 反向累积过程中只需要按照确定的分支计算即可（类似反推法），其他分支的数值可以不用计算和存储 深度学习中一般是对标量求导  线性神经网络线性回归 小批量随机梯度下降  由于在整个训练集上计算梯度太贵，故取小批量样本来近似计算损失，从而求取近似梯度。 更新公">
+<meta property="og:description" content="原则：记录深度学习的规律，例如模型构建、训练等方面的技巧；阐释我自己对于深度学习各知识点的理解，探究本质。 前置 深度学习一般用32位浮点数即可 反向累积过程中只需要按照确定的分支计算即可（类似反推法），其他分支的数值可以不用计算和存储 深度学习中一般是对标量求导  线性神经网络线性回归 小批量随机梯度下降 由于在整个训练集上计算梯度太贵，故取小批量样本来近似计算损失，从而求取近似梯度。 更新公式">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://jrxiang.github.io/myblog/uploads/AVATAR.jpg">
 <meta property="article:published_time" content="2026-01-17T03:48:19.000Z">
-<meta property="article:modified_time" content="2026-03-04T14:16:50.982Z">
+<meta property="article:modified_time" content="2026-09-22T14:56:36.119Z">
 <meta property="article:author" content="Thomas Bob">
 <meta property="article:tag" content="AI">
 <meta name="twitter:card" content="summary">
@@ -18,7 +18,7 @@
   "url": "https://jrxiang.github.io/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/",
   "image": "https://jrxiang.github.io/myblog/uploads/AVATAR.jpg",
   "datePublished": "2026-01-17T03:48:19.000Z",
-  "dateModified": "2026-03-04T14:16:50.982Z",
+  "dateModified": "2026-09-22T14:56:36.119Z",
   "author": [
     {
       "@type": "Person",
@@ -159,24 +159,134 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/myblog/uploads/AVATAR.jpg" onerror="this.onerror=null;this.src='/myblog/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/myblog/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/myblog/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/myblog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/myblog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/myblog/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 知识</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/myblog/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/myblog/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/myblog/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/myblog/"><span class="site-name">Thomas Bob's Blog</span></a><a class="nav-page-title" href="/myblog/"><span class="site-name">动手学深度学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/myblog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/myblog/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 知识</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/myblog/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/myblog/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/myblog/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">动手学深度学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-17T03:48:19.000Z" title="发表于 2026-01-17 11:48:19">2026-01-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-03-04T14:16:50.982Z" title="更新于 2026-03-04 22:16:50">2026-03-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>原则：记录深度学习的规律，例如模型构建、训练等方面的技巧；阐释我自己对于深度学习各知识点的理解，探究本质。</p>
+}</script><meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/myblog/uploads/AVATAR.jpg" onerror="this.onerror=null;this.src='/myblog/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/myblog/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/myblog/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/myblog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/myblog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/myblog/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 知识</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/myblog/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/myblog/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/myblog/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/myblog/"><span class="site-name">Thomas Bob's Blog</span></a><a class="nav-page-title" href="/myblog/"><span class="site-name">动手学深度学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/myblog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/myblog/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 知识</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/myblog/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/myblog/categories/"><i class="fa-fw fa fa-th"></i><span> 分类</span></a></li><li><a class="site-page child" href="/myblog/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">动手学深度学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-17T03:48:19.000Z" title="发表于 2026-01-17 11:48:19">2026-01-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-22T14:56:36.119Z" title="更新于 2026-09-22 22:56:36">2026-09-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p>原则：记录深度学习的规律，例如模型构建、训练等方面的技巧；阐释我自己对于深度学习各知识点的理解，探究本质。</p>
 <h2 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h2><ul>
 <li>深度学习一般用32位浮点数即可</li>
 <li>反向累积过程中只需要按照确定的分支计算即可（类似反推法），其他分支的数值可以不用计算和存储</li>
 <li>深度学习中一般是对标量求导</li>
 </ul>
 <h2 id="线性神经网络"><a href="#线性神经网络" class="headerlink" title="线性神经网络"></a>线性神经网络</h2><h3 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h3><ul>
-<li><p>小批量随机梯度下降</p>
-<ul>
+<li>小批量随机梯度下降<ul>
 <li>由于在整个训练集上计算梯度太贵，故取小批量样本来近似计算损失，从而求取近似梯度。</li>
-<li>更新公式：<br>$$<br>(\mathbf{w},b)\leftarrow(\mathbf{w},b)-\frac{\eta}{|\mathcal{B}|}\sum_{i\in\mathcal{B}}\partial_(\mathbf{w},b)l^{(i)}(\mathbf{w},b)<br>$$</li>
-<li>对于公式的理解：事实上，前面应该加上For every batch，$i$指的是一个小批量$\mathcal{B}$当中的第$i$个样本，因此$\frac{1}{|\mathcal{B}|}\sum_{i\in\mathcal{B}}\partial_(\mathbf{w},b)l^{(i)}(\mathbf{w},b)$是批量$\mathcal{B}$中的平均损失，故在数据并行计算时可以同时在不同的GPU上计算批量中的两小块数据的损失，再将损失相加，最后除以批量大小。一个批量算完之后再更新梯度，epoch即是在训练集上多滚几遍，把数据拟合得更好。</li>
+<li>更新公式：<script type="math/tex; mode=display">
+(\mathbf{w},b)\leftarrow(\mathbf{w},b)-\frac{\eta}{|\mathcal{B}|}\sum_{i\in\mathcal{B}}\partial_(\mathbf{w},b)l^{(i)}(\mathbf{w},b)</script></li>
+<li>对于公式的理解：事实上，前面应该加上For every batch，$i$指的是一个小批量$\mathcal{B}$当中的第$i$个样本，因此$\frac{1}{|\mathcal{B}|}\sum<em>{i\in\mathcal{B}}\partial</em>(\mathbf{w},b)l^{(i)}(\mathbf{w},b)$是批量$\mathcal{B}$中的平均损失，故在数据并行计算时可以同时在不同的GPU上计算批量中的两小块数据的损失，再将损失相加，最后除以批量大小。一个批量算完之后再更新梯度，epoch即是在训练集上多滚几遍，把数据拟合得更好。</li>
 </ul>
 </li>
-<li><p>对<strong>权重</strong>求导，故权重在初始化时需要<code>requires_grad=True</code></p>
-</li>
-<li><p>定义</p>
-<ul>
+<li>对<strong>权重</strong>求导，故权重在初始化时需要<code>requires_grad=True</code></li>
+<li>定义<ul>
 <li>数据迭代读取函数</li>
 <li>模型架构：net的本质是如何进行正向计算，即给定输入、权重如何求出输出</li>
 <li>模型参数初始化</li>
@@ -201,10 +311,8 @@
 </li>
 <li><p>随机梯度下降本质是带来噪音，batch_size越小正则化效果越明显</p>
 </li>
-<li><p>data_iter读取是把数据读进内存，如果数据太多内存会爆</p>
-</li>
-<li><p>用batch_size取数据未必需要保证取遍数据集，如果数据很多的话少取一些问题也不大</p>
-</li>
+<li>data_iter读取是把数据读进内存，如果数据太多内存会爆</li>
+<li>用batch_size取数据未必需要保证取遍数据集，如果数据很多的话少取一些问题也不大</li>
 </ul>
 <h3 id="Softmax-回归"><a href="#Softmax-回归" class="headerlink" title="Softmax 回归"></a>Softmax 回归</h3><ul>
 <li>softmax的本质：分类问题，把输出转换成概率，每一类的概率非负且总和为1，相当于<strong>单选题</strong></li>
@@ -214,12 +322,12 @@
 <li>Huber’s Robust loss：结合上述二者，即零点附近采用L2，其余采用L1</li>
 </ul>
 </li>
-<li>softlabel训练策略是将正确预测为0.9，剩下预测为0.1&#x2F;n</li>
+<li>softlabel训练策略是将正确预测为0.9，剩下预测为0.1/n</li>
 <li>logistic回归可以视作softmax回归的特例，即只需分2类的情况</li>
 </ul>
 <h2 id="多层感知机"><a href="#多层感知机" class="headerlink" title="多层感知机"></a>多层感知机</h2><h3 id="MLP"><a href="#MLP" class="headerlink" title="MLP"></a>MLP</h3><ul>
 <li>多类分类与Softmax回归的区别：加了隐藏层</li>
-<li>等价于使用批量大小为1的梯度下降，损失函数为$l(y,x,w)&#x3D;max(0,y&lt;w,x&gt;)$</li>
+<li>等价于使用批量大小为1的梯度下降，损失函数为$l(y,x,w)=max(0,y<w,x>)$</li>
 <li>激活函数作用在隐藏层，而且必须是非线性的，否则输出仍然是线性的</li>
 <li>激活函数类别<ul>
 <li>Sigmoid函数：(0,1)</li>
@@ -257,7 +365,8 @@
 </li>
 </ul>
 <h3 id="权重衰退"><a href="#权重衰退" class="headerlink" title="权重衰退"></a>权重衰退</h3><ul>
-<li>为什么叫做权重衰退？<br>损失定义为$l(w,b)+\frac{\lambda}{2}||w||^2$<br>则参数更新为<br>$$<br>w_{t+1}&#x3D;(1-\eta\lambda)w_t-\eta\frac{\partial l(w_t,b_t)}{\partial w_t}<br>$$</li>
+<li>为什么叫做权重衰退？<br>损失定义为$l(w,b)+\frac{\lambda}{2}||w||^2$<br>则参数更新为<script type="math/tex; mode=display">
+w_{t+1}=(1-\eta\lambda)w_t-\eta\frac{\partial l(w_t,b_t)}{\partial w_t}</script></li>
 </ul>
 <h3 id="丢弃法"><a href="#丢弃法" class="headerlink" title="丢弃法"></a>丢弃法</h3><ul>
 <li>正则项只在训练中使用：他们影响模型参数的更新，从而降低模型复杂度。</li>
@@ -282,12 +391,12 @@
 <li>将乘法变成加法，如LSTM、ResNet</li>
 <li>归一化：梯度归一化、梯度裁剪</li>
 <li>合理的权重初始和激活函数（使输入权重和输出权重的均值和方差相等）<ul>
-<li>权重初始：Xavier使得$\gamma_t(n_{t-1}+n_t)&#x2F;2&#x3D;1$，即$\gamma_t&#x3D;2&#x2F;(n_{t-1}+n_t)$（$n_{t-1}$是输入维度，$n_t$是输出维度，$\gamma_t$是权重的方差）<ul>
-<li>正态分布$N(0,\sqrt{2&#x2F;(n_{t-1}+n_t)})$</li>
-<li>均匀分布$u(-\sqrt{6&#x2F;(n_{t-1}+n_t)},\sqrt{6&#x2F;(n_{t-1}+n_t)})$</li>
+<li>权重初始：Xavier使得$\gamma<em>t(n</em>{t-1}+n<em>t)/2=1$，即$\gamma_t=2/(n</em>{t-1}+n<em>t)$（$n</em>{t-1}$是输入维度，$n_t$是输出维度，$\gamma_t$是权重的方差）<ul>
+<li>正态分布$N(0,\sqrt{2/(n_{t-1}+n_t)})$</li>
+<li>均匀分布$u(-\sqrt{6/(n<em>{t-1}+n_t)},\sqrt{6/(n</em>{t-1}+n_t)})$</li>
 </ul>
 </li>
-<li>激活函数：尽可能类似于$\sigma(x)&#x3D;x$<ul>
+<li>激活函数：尽可能类似于$\sigma(x)=x$<ul>
 <li>根据泰勒展开，relu和tanh可以不调整，Sigmoid需调整为$4sigmoid(x)-2$</li>
 </ul>
 </li>
@@ -316,7 +425,7 @@
 <li>每次接收到很不一样的样本，因此需要增大batch_size</li>
 </ul>
 </li>
-<li>填充：通常取$p_h&#x3D;k_h-1$、$p_w&#x3D;k_w-1$使得输入输出形状不变</li>
+<li>填充：通常取$p_h=k_h-1$、$p_w=k_w-1$使得输入输出形状不变</li>
 <li>步幅：通常取步幅为1，否则是因为考虑到计算量太大，则通常取2使之减半</li>
 <li>3个超参数中，核大小是最关键的（一般取3*3，填充一般取默认，步幅则取决于需要将模型复杂度控制在什么程度</li>
 <li>一般来说不会手写神经网络，除非输入的数据是非常特别的情况，基本上是套用经典的网络结构</li>
@@ -340,7 +449,7 @@
 <li>池化层：缓解卷积层对位置的敏感性，通常作用在卷积层之后<ul>
 <li>最大池化层：每个窗口中最强的模式信号</li>
 <li>平均池化层</li>
-<li>特点：输入通道数&#x3D;输出通道数，没有可以学习的参数，但是同样有填充、步幅、大小作为超参数</li>
+<li>特点：输入通道数=输出通道数，没有可以学习的参数，但是同样有填充、步幅、大小作为超参数</li>
 </ul>
 </li>
 </ul>
@@ -378,14 +487,13 @@
 <li>启示：做研究、做实践的时候，尽量用简单的模型，不要过度地设计，这样可以让我的研究在以后被重复使用（更容易被记住）</li>
 </ul>
 </li>
-<li><p>NiN</p>
-<ul>
+<li>NiN<ul>
 <li>网络中的网络<ul>
 <li>NiN块使用卷积层加两个1*1卷积层，后者对每个像素增加了非线性性</li>
 <li>NiN使用全局平均池化层来替代VGG和AlexNet中的全连接层：不容易过拟合，更少的参数个数</li>
 </ul>
 </li>
-<li>NiN块：一个卷积层后跟两个全连接层&#x3D;&gt;步幅1，无填充，输出形状跟卷积层输出一样，起到全连接层的作用</li>
+<li>NiN块：一个卷积层后跟两个全连接层=&gt;步幅1，无填充，输出形状跟卷积层输出一样，起到全连接层的作用</li>
 <li>架构：<ul>
 <li>无全连接层</li>
 <li>交替使用NiN块和步幅为2的最大池化层（逐步减小高宽和增大通道数）</li>
@@ -395,12 +503,11 @@
 <li>全局池化层：提升模型泛化性，但降低收敛速度</li>
 </ul>
 </li>
-<li><p>GoogLeNet</p>
-<ul>
+<li>GoogLeNet<ul>
 <li>5段，9个Inception块</li>
 <li>Inception块：4个路径（1*1、3*3、5*5、MaxPool）从不同层面抽取信息，然后在输出通道维合并<ul>
 <li>跟单3*3或5*5卷积层比，Inception块有更少的参数个数和计算复杂度</li>
-<li>4条路径通道数分配方法论：3*3大小合适，分配大约一半，1*1分配1&#x2F;4，剩下两条路径再做平分；其中，3*3和5*5中的两层按照1&#x2F;2或3&#x2F;4通道再做分配</li>
+<li>4条路径通道数分配方法论：3*3大小合适，分配大约一半，1*1分配1/4，剩下两条路径再做平分；其中，3*3和5*5中的两层按照1/2或3/4通道再做分配</li>
 <li>3*3和5*5中的1*1用来降低通道数，从而降低计算复杂度</li>
 </ul>
 </li>
@@ -420,8 +527,7 @@
 <li>除非是专家，否则最好不要改经典架构，最多可以：所有通道数除以4；调整输入输出的长宽</li>
 </ul>
 </li>
-<li><p>ResNet</p>
-<ul>
+<li>ResNet<ul>
 <li>加更多层不会让模型效果变差，通常来说是变好的</li>
 <li>残差块使得很深的网络更加容易训练，甚至可以训练一千层的网络</li>
 <li>1*1卷积层用于改变通道数，使得两条路径的输出通道数能够一致</li>
@@ -475,7 +581,7 @@
 </li>
 </ul>
 </li>
-<li>每秒钟计算的浮点数&#x3D;核的数目*主频</li>
+<li>每秒钟计算的浮点数=核的数目*主频</li>
 <li>GPU VS. CPU<ul>
 <li>GPU比CPU快的原因：核多、内存带宽大</li>
 <li>GPU相比CPU的弱点：内存小、控制流弱</li>
@@ -488,7 +594,7 @@
 <li>不要频繁在CPU和GPU之间传数据：带宽限制，同步开销</li>
 </ul>
 </li>
-<li>CPU&#x2F;GPU高性能计算编程<ul>
+<li>CPU/GPU高性能计算编程<ul>
 <li>CPU：可以处理通用计算。性能优化考虑数据读写效率和多线程<ul>
 <li>C++或者任何高性能语言：编译器成熟</li>
 </ul>
@@ -626,7 +732,7 @@
 <h3 id="微调"><a href="#微调" class="headerlink" title="微调"></a>微调</h3><ul>
 <li>一个神经网络一般可以分成两块<ul>
 <li>特征抽取将原始像素变成容易线性分割的特征</li>
-<li>线性分类器来做分类<br><img src="/2025/09/24/Git%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/finetuning.png" alt="fine tuning"></li>
+<li>线性分类器来做分类<br><img src="images/动手学深度学习/finetuning.png" alt="fine tuning"></li>
 </ul>
 </li>
 <li>训练<ul>
@@ -688,7 +794,8 @@
 </li>
 <li>交并比（IoU）<ul>
 <li>IoU用来计算两个框之间的相似度：0表示无重叠，1表示重合</li>
-<li>这是Jacquard指数的一个特殊情况<br>$$<br>J(A,B)&#x3D;\frac{|A\cap B|}{|A\cup B|}<br>$$</li>
+<li>这是Jacquard指数的一个特殊情况<script type="math/tex; mode=display">
+J(A,B)=\frac{|A\cap B|}{|A\cup B|}</script></li>
 </ul>
 </li>
 <li>赋予锚框标号<ul>
@@ -707,7 +814,10 @@
 </li>
 </ul>
 </li>
-<li>假设输入图像的高度为$h$，宽度为$w$。我们以图像的每个像素为中心生成不同形状的锚框：缩放比为$s$，宽高比为$r$，则<br>$$<br>s^2&#x3D;\frac{w’h’}{wh}<br>$$<br>同时因为在很多实现中，图像会被resize成正方形；或者以h作为尺度基准；或者默认h≈w，故面积$A&#x3D;h^2s^2$，就有$h^2s^2&#x3D;w’h’&#x3D;rh’^2$，故<br>$$<br>h’&#x3D;hs&#x2F;\sqrt{r}\<br>w’&#x3D;hs\sqrt{r}<br>$$<br>这是尺度由$s$控制，形状由$r$控制的设计</li>
+<li>假设输入图像的高度为$h$，宽度为$w$。我们以图像的每个像素为中心生成不同形状的锚框：缩放比为$s$，宽高比为$r$，则<script type="math/tex; mode=display">
+s^2=\frac{w'h'}{wh}</script>同时因为在很多实现中，图像会被resize成正方形；或者以h作为尺度基准；或者默认h≈w，故面积$A=h^2s^2$，就有$h^2s^2=w’h’=rh’^2$，故<script type="math/tex; mode=display">
+h'=hs/\sqrt{r}\\
+w'=hs\sqrt{r}</script>这是尺度由$s$控制，形状由$r$控制的设计</li>
 <li>在实践中，对于每个像素的锚框，我们只考虑包含$s_1$或$r_1$的组合，即以同一像素为中心的锚框的数量是$n+m-1$，对于整个输入图像，将共生成$wh(n+m-1)$个锚框</li>
 <li>非极大值抑制(NMS)：对于相似的锚框做去重处理</li>
 </ul>
@@ -774,10 +884,12 @@
 <li>采用固定模型对内容图片、样式图片和生成图片抽特征，然后分别对内容层、样式层和图片噪点计算损失，以此做反向传播。在这个过程中，变化的是生成图片，其他保持不变。</li>
 </ul>
 <h2 id="循环神经网络"><a href="#循环神经网络" class="headerlink" title="循环神经网络"></a>循环神经网络</h2><h3 id="序列模型"><a href="#序列模型" class="headerlink" title="序列模型"></a>序列模型</h3><ul>
-<li>序列模型：<br>$$<br>p(x)&#x3D;p(x_1)p(x_2|x_1)p(x_3|x_1,x_2)\cdots p(x_T|x_1,x_2,…,x_{T-1})<br>$$</li>
-<li>对条件概率建模：<br>$$<br>p(x_t|x_1,x_2,…,x_{t-1})&#x3D;p(x_t|f(x_1,x_2,…,x_{t-1}))<br>$$<br>其中，$f(x_1,x_2,…,x_{t-1})$是对见过的数据建模，因此也称自回归模型（预测自身而非预测标签）</li>
+<li>序列模型：<script type="math/tex; mode=display">
+p(x)=p(x_1)p(x_2|x_1)p(x_3|x_1,x_2)\cdots p(x_T|x_1,x_2,...,x_{T-1})</script></li>
+<li>对条件概率建模：<script type="math/tex; mode=display">
+p(x_t|x_1,x_2,...,x_{t-1})=p(x_t|f(x_1,x_2,...,x_{t-1}))</script>其中，$f(x<em>1,x_2,…,x</em>{t-1})$是对见过的数据建模，因此也称自回归模型（预测自身而非预测标签）</li>
 <li>方案A：马尔可夫假设：当前数据只跟$\tau$个过去数据点相关，由于数据特征定长，故用一个MLP即可实现f的建模</li>
-<li>方案B：潜变量模型：引入潜变量$h_t$来表示过去信息$h_t&#x3D;f(x_1,x_2,…,x_{t-1})$，这样$x_t&#x3D;p(x_t|h_t)$</li>
+<li>方案B：潜变量模型：引入潜变量$h<em>t$来表示过去信息$h_t=f(x_1,x_2,…,x</em>{t-1})$，这样$x_t=p(x_t|h_t)$</li>
 <li>序列模型中，记住序列未必是一件好事，因为这往往意味着泛化性较差</li>
 </ul>
 <h3 id="文本预处理"><a href="#文本预处理" class="headerlink" title="文本预处理"></a>文本预处理</h3><ul>
@@ -786,8 +898,9 @@
 </ul>
 <h3 id="语言模型"><a href="#语言模型" class="headerlink" title="语言模型"></a>语言模型</h3><ul>
 <li>使用计数来建模<ul>
-<li>例如，当序列长度为2时，有<br>$$<br>p(x,x’)&#x3D;p(x)p(x’|x)&#x3D;\frac{n(x)}{n}\frac{n(x,x’)}{n(x)}<br>$$</li>
-<li>N元语法：使用马尔可夫假设缓解这个问题，即$\tau&#x3D;N$，常用二元语法或三元语法</li>
+<li>例如，当序列长度为2时，有<script type="math/tex; mode=display">
+p(x,x')=p(x)p(x'|x)=\frac{n(x)}{n}\frac{n(x,x')}{n(x)}</script></li>
+<li>N元语法：使用马尔可夫假设缓解这个问题，即$\tau=N$，常用二元语法或三元语法</li>
 </ul>
 </li>
 <li>读取长序列数据<ul>
@@ -799,17 +912,18 @@
 </ul>
 <h3 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h3><ul>
 <li>公式<ul>
-<li>更新隐藏状态：$h_t&#x3D;\phi(W_{hh}h_{t-1}+W_{hx}x_{t-1}+b_h)$</li>
-<li>输出：$o_t&#x3D;W_{ho}h_t+b_o$</li>
+<li>更新隐藏状态：$h<em>t=\phi(W</em>{hh}h<em>{t-1}+W</em>{hx}x_{t-1}+b_h)$</li>
+<li>输出：$o<em>t=W</em>{ho}h_t+b_o$</li>
 </ul>
 </li>
 <li>困惑度(perplexity)<ul>
-<li>衡量一个语言模型的好坏可以用平均交叉熵<br>$$<br>\pi&#x3D;\frac{1}{n}\sum_{i&#x3D;1}^n-logp(x_t|x_{t-1},…)<br>$$<br>其中$p$是语言模型的预测概率，$x_t$是真实词</li>
+<li>衡量一个语言模型的好坏可以用平均交叉熵<script type="math/tex; mode=display">
+\pi=\frac{1}{n}\sum_{i=1}^n-logp(x_t|x_{t-1},...)</script>其中$p$是语言模型的预测概率，$x_t$是真实词</li>
 <li>历史原因NLP使用困惑度$e^{\pi}$来衡量：1表示完美，无穷大是最差情况</li>
 </ul>
 </li>
 <li>梯度裁剪：将梯度投影回$\theta$长度，防止梯度爆炸</li>
-<li>更多的应用RNNs<br><img src="/2025/09/24/Git%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/RNN_Applications.png" alt="RNN Applications"></li>
+<li>更多的应用RNNs<br><img src="images/动手学深度学习/RNN_Applications.png" alt="RNN Applications"></li>
 <li>循环神经网络的输出取决于当下输入和前一时间的隐变量</li>
 <li>Tip: 决定训练函数的是任务需求，而非模型类别</li>
 <li>每一个时间步都可以看作是一个单隐藏层的MLP</li>
@@ -856,17 +970,17 @@
 <li>CNN<ul>
 <li>下面层的CNN用于特征抽取，可以视作编码器；最后一层Softmax回归可以视作解码器</li>
 <li>编码器：将输入编程成中间表达形式（特征）</li>
-<li>解码器：将中间表示解码成输出<br><img src="/2025/09/24/Git%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/encoder_decoder_CNN.png" alt="encoder_decoder_CNN"></li>
+<li>解码器：将中间表示解码成输出<br><img src="images/动手学深度学习/encoder_decoder_CNN.png" alt="encoder_decoder_CNN"></li>
 </ul>
 </li>
 <li>RNN<ul>
 <li>编码器：将文本表示成向量</li>
-<li>解码器：向量表示成输出<br><img src="/2025/09/24/Git%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/encoder_decoder_RNN.png" alt="encoder_decoder_RNN"></li>
+<li>解码器：向量表示成输出<br><img src="images/动手学深度学习/encoder_decoder_RNN.png" alt="encoder_decoder_RNN"></li>
 </ul>
 </li>
 <li>一个模型被分为两块：<ul>
 <li>编码器处理输出</li>
-<li>解码器生成输出（也可以拿到输入）<br><img src="/2025/09/24/Git%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/encoder_decoder.png" alt="encoder_decoder"></li>
+<li>解码器生成输出（也可以拿到输入）<br><img src="images/动手学深度学习/encoder_decoder.png" alt="encoder_decoder"></li>
 </ul>
 </li>
 </ul>
@@ -877,8 +991,9 @@
 <li>编码器<strong>最后一层最后一个时刻</strong>的隐藏状态（包含了编码器输入的信息）作为解码器的初始状态</li>
 <li>训练时解码器直接使用目标句子作为输入；推理时解码器使用上一个输出作为当期输入</li>
 <li>衡量生成序列的好坏BLEU<ul>
-<li>$p_n$是预测中所有n-gram的精度。例如：标签序列A B C D E F和预测序列A B B C D，有$p_1&#x3D;\frac45, p_2&#x3D;\frac34, p_3&#x3D;\frac13, p_4&#x3D;0$</li>
-<li>BLEU定义：前面用于惩罚过短的预测，后面用于为长匹配分配高权重<br>$$<br>\exp{(\min{(0,1-\frac{len_{label}}{len_{pred}})})}\prod^k_{n&#x3D;1}p_n^{1&#x2F;2^n}<br>$$</li>
+<li>$p_n$是预测中所有n-gram的精度。例如：标签序列A B C D E F和预测序列A B B C D，有$p_1=\frac45, p_2=\frac34, p_3=\frac13, p_4=0$</li>
+<li>BLEU定义：前面用于惩罚过短的预测，后面用于为长匹配分配高权重<script type="math/tex; mode=display">
+\exp{(\min{(0,1-\frac{len_{label}}{len_{pred}})})}\prod^k_{n=1}p_n^{1/2^n}</script></li>
 </ul>
 </li>
 <li>decoder中把最后一个状态和输入拼在一起的作用：使每个token既有自身的特征表示，又有来自encoder的信息表示。</li>
@@ -889,8 +1004,9 @@
 <li>束搜索：<ul>
 <li>保存最好的k个候选，在每个时刻，对每个候选新加一项（也就是往后再预测一个，每个有$n$种可能），在$kn$个选项中选出最好的$k$个</li>
 <li>时间复杂度$O(knT)$</li>
-<li>每个候选的最终分数：防止总是选最短的<br>$$<br>\frac{1}{L^{\alpha}}\log{p(y_1,…,y_L)}&#x3D;\frac{1}{L^{\alpha}}\sum_{t’&#x3D;1}^L\log{p(y_{t’}|y_1,…,y_{t’-1})}<br>$$</li>
-<li>$k&#x3D;1$时是贪心搜索，一般来说k取5或者10</li>
+<li>每个候选的最终分数：防止总是选最短的<script type="math/tex; mode=display">
+\frac{1}{L^{\alpha}}\log{p(y_1,...,y_L)}=\frac{1}{L^{\alpha}}\sum_{t'=1}^L\log{p(y_{t'}|y_1,...,y_{t'-1})}</script></li>
+<li>$k=1$时是贪心搜索，一般来说k取5或者10</li>
 </ul>
 </li>
 </ul>
@@ -911,26 +1027,30 @@
 </ul>
 </li>
 <li>非参注意力池化层<ul>
-<li>给定数据$(x_i,y_i),i&#x3D;1,…,n$</li>
-<li>平均池化是最简单的方案：$f(x)&#x3D;\frac{1}{n}\sum_iy_i$</li>
-<li>更好的方案是60年代提出来的Nadaraya-Watson核回归，其中$x$是query，$x_j$是key，$y_i$是value，$f(x)$是查询结果，K可以看作是衡量$x$与$x_i$距离的函数，可以理解成对于一个新数据x把与之相近的数据的value找出来看<br>$$<br>f(x)&#x3D;\sum_{i&#x3D;1}^n\frac{K(x-x_i)}{\sum_{j&#x3D;1}^nK(x-x_j)}y_i<br>$$<ul>
-<li>若使用高斯核$K(u)&#x3D;\frac{1}{\sqrt{2\pi}}\exp{(-\frac{u^2}{2})}$，则$f(x)&#x3D;\sum_{i&#x3D;1}^n\softmax{(-\frac12(x-x_i)^2)}y_i$</li>
+<li>给定数据$(x_i,y_i),i=1,…,n$</li>
+<li>平均池化是最简单的方案：$f(x)=\frac{1}{n}\sum_iy_i$</li>
+<li>更好的方案是60年代提出来的Nadaraya-Watson核回归，其中$x$是query，$x_j$是key，$y_i$是value，$f(x)$是查询结果，K可以看作是衡量$x$与$x_i$距离的函数，可以理解成对于一个新数据x把与之相近的数据的value找出来看<script type="math/tex; mode=display">
+f(x)=\sum_{i=1}^n\frac{K(x-x_i)}{\sum_{j=1}^nK(x-x_j)}y_i</script><ul>
+<li>若使用高斯核$K(u)=\frac{1}{\sqrt{2\pi}}\exp{(-\frac{u^2}{2})}$，则$f(x)=\sum_{i=1}^n\softmax{(-\frac12(x-x_i)^2)}y_i$</li>
 </ul>
 </li>
 <li>拟合的函数过于平滑，实际中用得不多</li>
 </ul>
 </li>
 <li>参数化的注意力机制<ul>
-<li>在之前基础上可以引入可以学习的$w$（w控制的是高斯核窗口的大小，变窄），有<br>$$<br>f(x)&#x3D;\sum_{i&#x3D;1}^n\softmax{(-\frac12((x-x_i)w)^2)}y_i<br>$$</li>
-<li>可以一般地写作$f(x)&#x3D;\sum_i\alpha(x,x_i)y_i$，这里$\alpha(x,x_i)$是注意力权重</li>
+<li>在之前基础上可以引入可以学习的$w$（w控制的是高斯核窗口的大小，变窄），有<script type="math/tex; mode=display">
+f(x)=\sum_{i=1}^n\softmax{(-\frac12((x-x_i)w)^2)}y_i</script></li>
+<li>可以一般地写作$f(x)=\sum_i\alpha(x,x_i)y_i$，这里$\alpha(x,x_i)$是注意力权重</li>
 </ul>
 </li>
 </ul>
 <h3 id="注意力分数"><a href="#注意力分数" class="headerlink" title="注意力分数"></a>注意力分数</h3><ul>
 <li>前面提到$\alpha(x,x_i)$是注意力权重，其中的softmax计算前的变量（$-\frac{1}{2}(x-x_i)^2$）是注意力分数</li>
 <li>注意力分数的设计<ul>
-<li>Additive Attention：等价于<strong>将query和key合并起来后放入到一个隐藏大小为h输出大小为1的单隐藏层MLP</strong>，query和key不同长度也适用<br>$$<br>a(k,q)&#x3D;v^T\tanh{W_kk+W_qq}<br>$$</li>
-<li>Scaled Dot-Product Attention：<strong>直接将query和key做内积</strong>，若query和key都是同样的长度d，则<br>$$<br>a(q,k_i)&#x3D;&lt;q,k_i&gt;&#x2F;\sqrt{d}<br>$$<ul>
+<li>Additive Attention：等价于<strong>将query和key合并起来后放入到一个隐藏大小为h输出大小为1的单隐藏层MLP</strong>，query和key不同长度也适用<script type="math/tex; mode=display">
+a(k,q)=v^T\tanh{W_kk+W_qq}</script></li>
+<li>Scaled Dot-Product Attention：<strong>直接将query和key做内积</strong>，若query和key都是同样的长度d，则<script type="math/tex; mode=display">
+a(q,k_i)=<q,k_i>/\sqrt{d}</script><ul>
 <li>向量化版本：Q为(n, d)，K为(m, d)，V为(m, v)</li>
 <li>像注意力汇聚中提到的样例是标量，所以d为1，训练时，n为1（每次查询一个），m为n_train-1，v为1，n_train可以视作batch_size</li>
 </ul>
@@ -989,7 +1109,7 @@
 </ul>
 </li>
 <li>层归一化<ul>
-<li>批量归一化对每个特征&#x2F;通道里元素进行归一化，不适合序列长度会变的NLP应用</li>
+<li>批量归一化对每个特征/通道里元素进行归一化，不适合序列长度会变的NLP应用</li>
 <li>层归一化对每个样本里的元素进行归一化，可以使长度变化时更稳定</li>
 </ul>
 </li>
@@ -1025,8 +1145,8 @@
 <li>BERT架构<ul>
 <li>本质：只有编码器的Transformer</li>
 <li>两个版本：<ul>
-<li>Base: blocks &#x3D; 12, hidden size &#x3D; 768, heads &#x3D; 12, parameters &#x3D; 110M</li>
-<li>Large: blocks &#x3D; 24, hidden size &#x3D; 1024, heads &#x3D; 16, parameters &#x3D; 340M</li>
+<li>Base: blocks = 12, hidden size = 768, heads = 12, parameters = 110M</li>
+<li>Large: blocks = 24, hidden size = 1024, heads = 16, parameters = 340M</li>
 </ul>
 </li>
 <li>在大规模数据上训练 &gt; 3B词</li>
@@ -1060,18 +1180,78 @@
 </ul>
 </li>
 </ul>
-<h4 id="BERT微调"><a href="#BERT微调" class="headerlink" title="BERT微调"></a>BERT微调</h4></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jrxiang.github.io/">Thomas Bob</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jrxiang.github.io/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">https://jrxiang.github.io/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jrxiang.github.io/myblog" target="_blank">Thomas Bob's Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/myblog/uploads/AVATAR.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/myblog/2026/03/16/Transformer/" title="Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Transformer</div></div><div class="info-2"><div class="info-item-1">前言 Transformer架构的宏观理解：输入一个提示并输出对该提示的回应  Bag-of-Words A Recent History of Language AI   词袋(Bag-of-Words)：输入中token在Vocabulary中出现的频率，同时顺序也很重要，表示出来的向量即为Vector Representation  Word2Vec 背景：One-Hot编码不能表示词之间的相似性 Word2Vec通过在大量文本数据上进行训练来学习单词的语义表示 这是一个Representation Model，通过将sentence中的tokens转化为d维的向量，根据token与token之间的相似度来调整token的向量表示  Encoding and Decoding Context with Attention 背景：Word2Vec创造的是静态嵌入，例如对于bank这个词在不同语境下有相同的嵌入表示 Seq2Seq是一种自回归模型，即通过前面的输入和当前的输出作为下一时刻的输入 Attention选择性地确定在特定句子中哪些单词最重要，解码器使用注意力机制来查看...</div></div></div></a><a class="pagination-related" href="/myblog/2026/01/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">计算机网络</div></div><div class="info-2"><div class="info-item-1">计算机网络和互联网Internet具体构成角度：  节点 主机及其上运行的应用程序 路由器、交换机等网络交换设备   边：通信链路 接入网链路：主机连接到互联网的链路 主干链路：路由器间的链路   协议：控制发送、接收消息 如TCP、IP、HTTP、FTP、PPP    续：  数以亿计的、互联的计算设备 主机(host)&#x3D;端系统(end system) 运行网络应用程序   通信链路 光纤、同轴电缆、无线电、卫星 传输速率&#x3D;带宽(bps, Bit Per Second)   分组交换设备：转发分组(packets) 路由器和交换机   Internet: “网络的网络” 松散的层次结构，互连的ISP 公共Internet vs 专用intranet   Internet标准 RFC: Request for comments IETF: Internet Engineering Task Force    服务角度：  使用通信设施进行通信的分布式应用 Web、VoIP、email、分布式游戏、电子商务、社交网络   通信基础设施为apps提供编程接口（通信...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/myblog/uploads/AVATAR.jpg" onerror="this.onerror=null;this.src='/myblog/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Thomas Bob</div><div class="author-info-description">A student in ZJU.</div><div class="site-data"><a href="/myblog/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/myblog/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/myblog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/jrxiang" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1648768667@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">前置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">2.</span> <span class="toc-text">线性神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-number">2.1.</span> <span class="toc-text">线性回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Softmax-%E5%9B%9E%E5%BD%92"><span class="toc-number">2.2.</span> <span class="toc-text">Softmax 回归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-number">3.</span> <span class="toc-text">多层感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MLP"><span class="toc-number">3.1.</span> <span class="toc-text">MLP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9%E3%80%81%E6%AC%A0%E6%8B%9F%E5%90%88%E5%92%8C%E8%BF%87%E6%8B%9F%E5%90%88"><span class="toc-number">3.2.</span> <span class="toc-text">模型选择、欠拟合和过拟合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%87%8D%E8%A1%B0%E9%80%80"><span class="toc-number">3.3.</span> <span class="toc-text">权重衰退</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A2%E5%BC%83%E6%B3%95"><span class="toc-number">3.4.</span> <span class="toc-text">丢弃法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%A8%B3%E5%AE%9A%E6%80%A7%E5%92%8C%E6%A8%A1%E5%9E%8B%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.5.</span> <span class="toc-text">数值稳定性和模型初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PyTorch%E5%92%8CGPU"><span class="toc-number">4.</span> <span class="toc-text">PyTorch和GPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">5.</span> <span class="toc-text">卷积神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">5.1.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B"><span class="toc-number">5.2.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E5%BD%92%E4%B8%80%E5%8C%96"><span class="toc-number">5.3.</span> <span class="toc-text">批量归一化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%A1%AC%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">深度学习硬件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E5%92%8CGPU"><span class="toc-number">6.1.</span> <span class="toc-text">CPU和GPU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TPU%E5%92%8C%E5%85%B6%E4%BB%96"><span class="toc-number">6.2.</span> <span class="toc-text">TPU和其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%80%A7%E8%83%BD"><span class="toc-number">7.</span> <span class="toc-text">计算性能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E5%A4%9A%E5%8D%A1%E5%B9%B6%E8%A1%8C"><span class="toc-number">7.1.</span> <span class="toc-text">单机多卡并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83"><span class="toc-number">7.2.</span> <span class="toc-text">分布式训练</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89"><span class="toc-number">8.</span> <span class="toc-text">计算机视觉</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%B9%BF"><span class="toc-number">8.1.</span> <span class="toc-text">数据增广</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E8%B0%83"><span class="toc-number">8.2.</span> <span class="toc-text">微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B"><span class="toc-number">8.3.</span> <span class="toc-text">物体检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%9A%E6%A1%86"><span class="toc-number">8.4.</span> <span class="toc-text">锚框</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="toc-number">8.5.</span> <span class="toc-text">目标检测算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#R-CNN%E7%B3%BB%E5%88%97"><span class="toc-number">8.5.1.</span> <span class="toc-text">R-CNN系列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSD"><span class="toc-number">8.5.2.</span> <span class="toc-text">SSD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YOLO"><span class="toc-number">8.5.3.</span> <span class="toc-text">YOLO</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2"><span class="toc-number">8.6.</span> <span class="toc-text">语义分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E7%BD%AE%E5%8D%B7%E7%A7%AF"><span class="toc-number">8.7.</span> <span class="toc-text">转置卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88FCN%EF%BC%89"><span class="toc-number">8.8.</span> <span class="toc-text">全连接卷积神经网络（FCN）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E8%BF%81%E7%A7%BB"><span class="toc-number">8.9.</span> <span class="toc-text">样式迁移</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">9.</span> <span class="toc-text">循环神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.1.</span> <span class="toc-text">序列模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">9.2.</span> <span class="toc-text">文本预处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.3.</span> <span class="toc-text">语言模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RNN"><span class="toc-number">9.4.</span> <span class="toc-text">RNN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GRU"><span class="toc-number">9.5.</span> <span class="toc-text">GRU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LSTM"><span class="toc-number">9.6.</span> <span class="toc-text">LSTM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">9.7.</span> <span class="toc-text">深度循环神经网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">9.8.</span> <span class="toc-text">双向循环神经网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="toc-number">9.9.</span> <span class="toc-text">编码器-解码器架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seq2seq"><span class="toc-number">9.10.</span> <span class="toc-text">seq2seq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%9F%E6%90%9C%E7%B4%A2"><span class="toc-number">9.11.</span> <span class="toc-text">束搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="toc-number">10.</span> <span class="toc-text">注意力机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%B1%87%E8%81%9A"><span class="toc-number">10.1.</span> <span class="toc-text">注意力汇聚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%88%86%E6%95%B0"><span class="toc-number">10.2.</span> <span class="toc-text">注意力分数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E7%9A%84seq2seq-Bahdanau%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="toc-number">10.3.</span> <span class="toc-text">使用注意力机制的seq2seq (Bahdanau注意力)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="toc-number">10.4.</span> <span class="toc-text">自注意力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transformer"><span class="toc-number">10.5.</span> <span class="toc-text">Transformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BERT"><span class="toc-number">10.6.</span> <span class="toc-text">BERT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#BERT%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="toc-number">10.6.1.</span> <span class="toc-text">BERT预训练</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BERT%E5%BE%AE%E8%B0%83"><span class="toc-number">10.6.2.</span> <span class="toc-text">BERT微调</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/03/16/Transformer/" title="Transformer">Transformer</a><time datetime="2026-03-16T15:14:29.000Z" title="发表于 2026-03-16 23:14:29">2026-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" title="动手学深度学习">动手学深度学习</a><time datetime="2026-01-17T03:48:19.000Z" title="发表于 2026-01-17 11:48:19">2026-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络">计算机网络</a><time datetime="2026-01-15T04:01:44.000Z" title="发表于 2026-01-15 12:01:44">2026-01-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/12/hexo%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="hexo使用指南">hexo使用指南</a><time datetime="2026-01-12T10:18:20.000Z" title="发表于 2026-01-12 18:18:20">2026-01-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/12/CUDA%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0/" title="CUDA版本更新">CUDA版本更新</a><time datetime="2026-01-12T07:19:04.000Z" title="发表于 2026-01-12 15:19:04">2026-01-12</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Thomas Bob</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/myblog/js/utils.js"></script><script src="/myblog/js/main.js"></script><div class="js-pjax"><script>(async () => {
-  const showKatex = () => {
-    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
-  }
+<h4 id="BERT微调"><a href="#BERT微调" class="headerlink" title="BERT微调"></a>BERT微调</h4></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jrxiang.github.io/">Thomas Bob</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jrxiang.github.io/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">https://jrxiang.github.io/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jrxiang.github.io/myblog" target="_blank">Thomas Bob's Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/myblog/uploads/AVATAR.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/myblog/2026/03/16/Transformer/" title="Transformer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Transformer</div></div><div class="info-2"><div class="info-item-1">前言 Transformer架构的宏观理解：输入一个提示并输出对该提示的回应  Bag-of-Words A Recent History of Language AI   词袋(Bag-of-Words)：输入中token在Vocabulary中出现的频率，同时顺序也很重要，表示出来的向量即为Vector Representation  Word2Vec 背景：One-Hot编码不能表示词之间的相似性 Word2Vec通过在大量文本数据上进行训练来学习单词的语义表示 这是一个Representation Model，通过将sentence中的tokens转化为d维的向量，根据token与token之间的相似度来调整token的向量表示  Encoding and Decoding Context with Attention 背景：Word2Vec创造的是静态嵌入，例如对于bank这个词在不同语境下有相同的嵌入表示 Seq2Seq是一种自回归模型，即通过前面的输入和当前的输出作为下一时刻的输入 Attention选择性地确定在特定句子中哪些单词最重要，解码器使用注意力机制来查看...</div></div></div></a><a class="pagination-related" href="/myblog/2026/01/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">计算机网络</div></div><div class="info-2"><div class="info-item-1">计算机网络和互联网Internet具体构成角度：  节点 主机及其上运行的应用程序 路由器、交换机等网络交换设备   边：通信链路 接入网链路：主机连接到互联网的链路 主干链路：路由器间的链路   协议：控制发送、接收消息 如TCP、IP、HTTP、FTP、PPP    续：  数以亿计的、互联的计算设备 主机(host)=端系统(end system) 运行网络应用程序   通信链路 光纤、同轴电缆、无线电、卫星 传输速率=带宽(bps, Bit Per Second)   分组交换设备：转发分组(packets) 路由器和交换机   Internet: “网络的网络” 松散的层次结构，互连的ISP 公共Internet vs 专用intranet   Internet标准 RFC: Request for comments IETF: Internet Engineering Task Force    服务角度：  使用通信设施进行通信的分布式应用 Web、VoIP、email、分布式游戏、电子商务、社交网络   通信基础设施为apps提供编程接口（通信服务） 将发送和接收...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/myblog/uploads/AVATAR.jpg" onerror="this.onerror=null;this.src='/myblog/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Thomas Bob</div><div class="author-info-description">朝饮木兰之坠露兮，夕餐秋菊之落英。</div><div class="site-data"><a href="/myblog/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/myblog/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/myblog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/jrxiang"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/jrxiang" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1648768667@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">前置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">2.</span> <span class="toc-text">线性神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-number">2.1.</span> <span class="toc-text">线性回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Softmax-%E5%9B%9E%E5%BD%92"><span class="toc-number">2.2.</span> <span class="toc-text">Softmax 回归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-number">3.</span> <span class="toc-text">多层感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MLP"><span class="toc-number">3.1.</span> <span class="toc-text">MLP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9%E3%80%81%E6%AC%A0%E6%8B%9F%E5%90%88%E5%92%8C%E8%BF%87%E6%8B%9F%E5%90%88"><span class="toc-number">3.2.</span> <span class="toc-text">模型选择、欠拟合和过拟合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%87%8D%E8%A1%B0%E9%80%80"><span class="toc-number">3.3.</span> <span class="toc-text">权重衰退</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A2%E5%BC%83%E6%B3%95"><span class="toc-number">3.4.</span> <span class="toc-text">丢弃法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%A8%B3%E5%AE%9A%E6%80%A7%E5%92%8C%E6%A8%A1%E5%9E%8B%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.5.</span> <span class="toc-text">数值稳定性和模型初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PyTorch%E5%92%8CGPU"><span class="toc-number">4.</span> <span class="toc-text">PyTorch和GPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">5.</span> <span class="toc-text">卷积神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">5.1.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B"><span class="toc-number">5.2.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E5%BD%92%E4%B8%80%E5%8C%96"><span class="toc-number">5.3.</span> <span class="toc-text">批量归一化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%A1%AC%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">深度学习硬件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E5%92%8CGPU"><span class="toc-number">6.1.</span> <span class="toc-text">CPU和GPU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TPU%E5%92%8C%E5%85%B6%E4%BB%96"><span class="toc-number">6.2.</span> <span class="toc-text">TPU和其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%80%A7%E8%83%BD"><span class="toc-number">7.</span> <span class="toc-text">计算性能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E5%A4%9A%E5%8D%A1%E5%B9%B6%E8%A1%8C"><span class="toc-number">7.1.</span> <span class="toc-text">单机多卡并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83"><span class="toc-number">7.2.</span> <span class="toc-text">分布式训练</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89"><span class="toc-number">8.</span> <span class="toc-text">计算机视觉</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%B9%BF"><span class="toc-number">8.1.</span> <span class="toc-text">数据增广</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E8%B0%83"><span class="toc-number">8.2.</span> <span class="toc-text">微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B"><span class="toc-number">8.3.</span> <span class="toc-text">物体检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%9A%E6%A1%86"><span class="toc-number">8.4.</span> <span class="toc-text">锚框</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="toc-number">8.5.</span> <span class="toc-text">目标检测算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#R-CNN%E7%B3%BB%E5%88%97"><span class="toc-number">8.5.1.</span> <span class="toc-text">R-CNN系列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSD"><span class="toc-number">8.5.2.</span> <span class="toc-text">SSD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YOLO"><span class="toc-number">8.5.3.</span> <span class="toc-text">YOLO</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2"><span class="toc-number">8.6.</span> <span class="toc-text">语义分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E7%BD%AE%E5%8D%B7%E7%A7%AF"><span class="toc-number">8.7.</span> <span class="toc-text">转置卷积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88FCN%EF%BC%89"><span class="toc-number">8.8.</span> <span class="toc-text">全连接卷积神经网络（FCN）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E8%BF%81%E7%A7%BB"><span class="toc-number">8.9.</span> <span class="toc-text">样式迁移</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">9.</span> <span class="toc-text">循环神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.1.</span> <span class="toc-text">序列模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">9.2.</span> <span class="toc-text">文本预处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.3.</span> <span class="toc-text">语言模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RNN"><span class="toc-number">9.4.</span> <span class="toc-text">RNN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GRU"><span class="toc-number">9.5.</span> <span class="toc-text">GRU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LSTM"><span class="toc-number">9.6.</span> <span class="toc-text">LSTM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">9.7.</span> <span class="toc-text">深度循环神经网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">9.8.</span> <span class="toc-text">双向循环神经网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8-%E8%A7%A3%E7%A0%81%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="toc-number">9.9.</span> <span class="toc-text">编码器-解码器架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seq2seq"><span class="toc-number">9.10.</span> <span class="toc-text">seq2seq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%9F%E6%90%9C%E7%B4%A2"><span class="toc-number">9.11.</span> <span class="toc-text">束搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="toc-number">10.</span> <span class="toc-text">注意力机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%B1%87%E8%81%9A"><span class="toc-number">10.1.</span> <span class="toc-text">注意力汇聚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%88%86%E6%95%B0"><span class="toc-number">10.2.</span> <span class="toc-text">注意力分数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E7%9A%84seq2seq-Bahdanau%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="toc-number">10.3.</span> <span class="toc-text">使用注意力机制的seq2seq (Bahdanau注意力)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="toc-number">10.4.</span> <span class="toc-text">自注意力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transformer"><span class="toc-number">10.5.</span> <span class="toc-text">Transformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BERT"><span class="toc-number">10.6.</span> <span class="toc-text">BERT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#BERT%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="toc-number">10.6.1.</span> <span class="toc-text">BERT预训练</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BERT%E5%BE%AE%E8%B0%83"><span class="toc-number">10.6.2.</span> <span class="toc-text">BERT微调</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/03/16/Transformer/" title="Transformer">Transformer</a><time datetime="2026-03-16T15:14:29.000Z" title="发表于 2026-03-16 23:14:29">2026-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/17/%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" title="动手学深度学习">动手学深度学习</a><time datetime="2026-01-17T03:48:19.000Z" title="发表于 2026-01-17 11:48:19">2026-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络">计算机网络</a><time datetime="2026-01-15T04:01:44.000Z" title="发表于 2026-01-15 12:01:44">2026-01-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/12/hexo%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="hexo使用指南">hexo使用指南</a><time datetime="2026-01-12T10:18:20.000Z" title="发表于 2026-01-12 18:18:20">2026-01-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/myblog/2026/01/12/CUDA%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0/" title="CUDA版本更新">CUDA版本更新</a><time datetime="2026-01-12T07:19:04.000Z" title="发表于 2026-01-12 15:19:04">2026-01-12</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Thomas Bob</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/myblog/js/utils.js"></script><script src="/myblog/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
 
-  if (!window.katex_js_css) {
-    window.katex_js_css = true
-    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
-    if (false) {
-      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
     }
   }
 
-  showKatex()
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
 })()</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
